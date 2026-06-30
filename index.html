@@ -1,167 +1,2107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PDF Viewer</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f4f4f4;
-      padding: 24px;
-    }
-
-    .top-actions {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 24px;
-    }
-
-    .destroy-btn {
-      background: #d32f2f;
-      color: white;
-      border: none;
-      padding: 14px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      transition: 0.2s;
-    }
-
-    .destroy-btn:hover {
-      background: #9a0007;
-    }
-
-    h1 {
-      margin-bottom: 24px;
-      text-align: center;
-    }
-
-    .pdf-container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .pdf-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .pdf-header h2 {
-      font-size: 20px;
-    }
-
-    .download-btn {
-      text-decoration: none;
-      background: #007bff;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 6px;
-      transition: 0.2s;
-    }
-
-    .download-btn:hover {
-      background: #0056b3;
-    }
-
-    iframe {
-      width: 100%;
-      height: 700px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    @media (max-width: 768px) {
-      iframe {
-        height: 500px;
-      }
-
-      .pdf-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Programs</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
+:root{--bg:#121212;--card:#1b1b1b;--head:#232323;--hover:#2d2d2d;--border:#343434;--text:#e5e5e5;--muted:#aaa;--accent:#4a90e2;}
+body{background:var(--bg);color:var(--text);padding:24px}
+.toolbar{display:flex;justify-content:flex-end;gap:10px;margin-bottom:18px}
+button{background:var(--head);color:var(--text);border:1px solid var(--border);padding:8px 12px;border-radius:4px;cursor:pointer}
+button:hover{background:var(--hover)}
+.container{max-width:950px;margin:auto}
+.program{border:1px solid var(--border);border-radius:6px;background:var(--card);margin-bottom:10px;overflow:hidden}
+.program-title{padding:14px 16px;background:var(--head);cursor:pointer;font-weight:600}
+.program.active .program-title{border-left:3px solid var(--accent)}
+.program-files{display:none}
+.program.active .program-files{display:block}
+.file{border-top:1px solid var(--border)}
+.file-title{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;background:#1f1f1f;cursor:pointer}
+.file-title:hover{background:var(--hover)}
+.file-content{display:none;padding:12px}
+.file.active .file-content{display:block}
+.code{width:100%;min-height:240px;background:#101010;color:#ddd;border:1px solid var(--border);padding:12px;border-radius:4px;font-family:Consolas,monospace;resize:vertical}
+.copy{padding:4px 8px}
+</style>
 </head>
-
 <body>
 
-  <!-- TOP BUTTON -->
-  <div class="top-actions">
-    <button class="destroy-btn" onclick="destroyPage()">
-      Destroy Page & Open Android Studio
-    </button>
-  </div>
+<div class="toolbar">
+<button onclick="importData()">📂 Download</button>
 
-  <h1>PDF Documents</h1>
+<input type="file" id="fileInput" accept=".json" hidden>
+</div>
 
-  <!-- PDF 1 -->
-  <div class="pdf-container">
-    <div class="pdf-header">
-      <h2>Document 1</h2>
+<div class="container">
 
-      <a href="document1.pdf" download class="download-btn">
-        Download PDF
-      </a>
-    </div>
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 1 - Hello World</div>
+<div class="program-files">
 
-    <iframe src="document1.pdf"></iframe>
-  </div>
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+<?xml version="1.0" encoding="utf-8"?>
 
-  <!-- PDF 2 -->
-  <div class="pdf-container">
-    <div class="pdf-header">
-      <h2>Document 2</h2>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java → class name -->
 
-      <a href="document2.pdf" download class="download-btn">
-        Download PDF
-      </a>
-    </div>
+    <TextView
+        android:id="@+id/textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Hello World"/>
 
-    <iframe src="document2.pdf"></iframe>
-  </div>
+</RelativeLayout></textarea>
+</div>
+</div>
 
-  <script>
-  function destroyPage() {
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+package com.helloworld;    // [P] MAIN
 
-    // Instantly replace current page
-    document.body.innerHTML = `
-      <div style="
-        background:#111;
-        color:white;
-        width:100vw;
-        height:100vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        font-size:32px;
-        font-weight:bold;
-      ">
-        Opening Android Studio...
-      </div>
-    `;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
-    // Immediate redirect
-    window.location.replace(
-      "https://developer.android.com/studio"
-    );
-  }
+public class MainActivity extends AppCompatActivity    // [A] MAIN (Java filename: MainActivity.java)
+{
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);    // [L] Match: activity_main.xml filename
+    }
+
+}</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>AndroidManifest.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Helloworld"> <!-- [T] Match: styles.xml → theme name -->
+
+        <activity
+            android:name=".MainActivity"    <!-- [A] Match: MainActivity.java → class name -->
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest></textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 2 - Screen Orientation</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java → class name -->
+
+    <TextView
+        android:id="@+id/orientationchange" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="107dp"
+        android:layout_marginTop="406dp"
+        android:text="OrientationChange"
+        android:textSize="24sp"/>
+
+</RelativeLayout>
+</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+package com.example.orientationchange;    // [P] MAIN
+
+import android.graphics.Point;
+import android.os.Bundle;
+import android.view.Display;
+import android.view.WindowManager;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity    // [A] MAIN (Java filename: MainActivity.java)
+{
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);    // [L] Match: activity_main.xml filename
+
+        TextView orientationMessage = findViewById(R.id.orientationchange);    // [ID] Match: activity_main.xml → android:id
+
+        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        Display d = wm.getDefaultDisplay();
+
+        Point size = new Point();
+
+        d.getSize(size);
+
+        int w = size.x;
+        int h = size.y;
+
+        if (w > h) {
+            orientationMessage.setText("Landscape Mode");
+        }
+        else {
+            orientationMessage.setText("Portrait Mode");
+        }
+
+    }
+
+}.</textarea>
+</div>
+</div>
+
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 3 - Login Window Using UI</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/images" <!-- [D] MAIN -->
+    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java -->
+
+    <TextView
+        android:id="@+id/textView" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="131dp"
+        android:text="USER NAME"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextText" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView" <!-- [ID] Match -->
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Enter the Name" />
+
+    <TextView
+        android:id="@+id/textView2" <!-- [ID] MAIN -->
+        android:layout_width="143dp"
+        android:layout_height="36dp"
+        android:layout_below="@id/editTextText" <!-- [ID] Match -->
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="147dp"
+        android:text="PASSWORD"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextText2" <!-- [ID] MAIN -->
+        android:layout_width="222dp"
+        android:layout_height="55dp"
+        android:layout_below="@id/textView" <!-- [ID] Match -->
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="83dp"
+        android:layout_marginTop="173dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Enter the Password" />
+
+    <Button
+        android:id="@+id/button" <!-- [ID] MAIN -->
+        android:layout_width="301dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="58dp"
+        android:layout_marginBottom="141dp"
+        android:text="LOGIN"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
+</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+package com.example.loginapp; // [P] MAIN
+
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity // [A] MAIN (Filename: MainActivity.java)
+{
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+    }
+}
+</textarea>
+</div>
+</div>
+
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 4 - Explicit Intent And Implicit Intent</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java -->
+
+    <Button
+        android:id="@+id/button" <!-- [ID] MAIN -->
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="304dp"
+        android:onClick="onImplicitButtonClicked" <!-- [M] Match: MainActivity.java -->
+        android:text="Implicit Intent" />
+
+    <Button
+        android:id="@+id/button2" <!-- [ID] MAIN -->
+        android:layout_width="216dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="430dp"
+        android:layout_marginEnd="83dp"
+        android:onClick="onExplicitButtonClicked" <!-- [M] Match: MainActivity.java -->
+        android:text="Explicit Intent" />
+
+</RelativeLayout>
+</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main2.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity2"> <!-- [A] Match: MainActivity2.java -->
+
+    <TextView
+        android:id="@+id/tV" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Welcome to explicit intent"/>
+
+</RelativeLayout>.</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.l4; // [P] MAIN
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity // [A] MAIN (Filename: MainActivity.java)
+{
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+    }
+
+    public void onImplicitButtonClicked(View view) // [M] Match: activity_main.xml
+    {
+        Uri url = Uri.parse("https://www.google.com");
+        Intent i = new Intent(Intent.ACTION_VIEW, url);
+        startActivity(i);
+    }
+
+    public void onExplicitButtonClicked(View view) // [M] Match: activity_main.xml
+    {
+        Intent i = new Intent(MainActivity.this, MainActivity2.class); // [A] Match
+        startActivity(i);
+    }
+}</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>NewActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.l4; // [P] Match
+
+import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity2 extends AppCompatActivity // [A] MAIN
+{
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main2); // [L] MAIN (Must match XML filename)
+    }
+}</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>AndroidManifest.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.L4" <!-- [T] MAIN -->
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity2" /> <!-- [A] Match -->
+
+        <activity
+            android:name=".MainActivity" <!-- [A] Match -->
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest></textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 5 - Custom  Designed Screen</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/splash_screen" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#800080"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <ProgressBar
+            android:id="@+id/progress_Bar" <!-- [ID] MAIN -->
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:indeterminate="true"/>
+
+        <TextView
+            android:id="@+id/textView" <!-- [ID] MAIN -->
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to skyward app"
+            android:textSize="24dp"
+            android:textColor="#FF000000"
+            android:layout_below="@+id/progress_Bar" <!-- [ID] Match -->
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/main_content" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/welcome_text" <!-- [ID] MAIN -->
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="welcome to the main activity"
+            android:textSize="18sp"
+            android:textColor="#0000FF"/>
+
+    </LinearLayout>
+
+</FrameLayout>
+</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.splashscreen; // [P] MAIN
+
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity // [A] MAIN (Filename: MainActivity.java)
+{
+
+    private static final int SPLASH_DISPLAY_LENGTH = 10000; // [V] MAIN
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+
+        final View splashscreen = findViewById(R.id.splash_screen); // [ID] Match
+
+        final View mainContent = findViewById(R.id.main_content); // [ID] Match
+
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                splashscreen.setVisibility(View.GONE);
+
+                mainContent.setVisibility(View.VISIBLE);
+            }
+        }, SPLASH_DISPLAY_LENGTH); // [V] Match
+    }
+}</textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 6 - UI with All Views</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java -->
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/heading" /> <!-- [S] Match: strings.xml -->
+
+    <Button
+        android:id="@+id/buttonExample" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/example_button" /> <!-- [S] Match -->
+
+    <CheckBox
+        android:id="@+id/checkBoxExample" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/checkbox_example" /> <!-- [S] Match -->
+
+    <ToggleButton
+        android:id="@+id/toggleButtonExample" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/togglebutton_example" <!-- [S] Match -->
+        android:textOn="@string/on" <!-- [S] Match -->
+        android:textOff="@string/off" /> <!-- [S] Match -->
+
+    <RadioGroup
+        android:id="@+id/radioGroupExample" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioBtn1" <!-- [ID] MAIN -->
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/radiobutton_1" /> <!-- [S] Match -->
+
+        <RadioButton
+            android:id="@+id/radioBtn2" <!-- [ID] MAIN -->
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radiobutton_2" /> <!-- [S] Match -->
+
+        <RadioButton
+            android:id="@+id/radioBtn3" <!-- [ID] MAIN -->
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/radiobutton_3" /> <!-- [S] Match -->
+
+    </RadioGroup>
+
+    <ImageButton
+        android:id="@+id/imageButtonExample" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_add_ic_call_24" <!-- [D] MAIN -->
+        android:contentDescription="@string/todo" /> <!-- [S] Match -->
+
+</LinearLayout></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.uidemo; // [P] MAIN
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity { // [A] MAIN (Filename: MainActivity.java)
+
+    CheckBox exampleCheckBox;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+
+        // Declaring view objects and finding them by their id
+
+        Button example = findViewById(R.id.buttonExample); // [ID] Match
+
+        exampleCheckBox = findViewById(R.id.checkBoxExample); // [ID] Match
+
+        RadioGroup exampleRadioGroup = findViewById(R.id.radioGroupExample); // [ID] Match
+
+        ToggleButton exampletoggleButton = findViewById(R.id.toggleButtonExample); // [ID] Match
+
+        ImageButton exampleImageButton = findViewById(R.id.imageButtonExample); // [ID] Match
+
+        // Button Listener
+
+        example.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(),
+                        "Button clicked",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Image Button Listener
+
+        exampleImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(),
+                        "Calling Image button",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Toggle Button Listener
+
+        exampletoggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (exampletoggleButton.isChecked()) {
+
+                    Toast.makeText(getApplicationContext(),
+                            "ON Button clicked",
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(),
+                            "OFF Button clicked",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // CheckBox Listener
+
+        exampleCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if (isChecked) {
+
+                    Toast.makeText(getApplicationContext(),
+                            "Checked",
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(),
+                            "Unchecked",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        // Radio Button Listener
+
+        exampleRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedButtonId) {
+
+                if (checkedButtonId == R.id.radioBtn1) { // [ID] Match
+
+                    Toast.makeText(getApplicationContext(),
+                            "Course selected-Arts",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                if (checkedButtonId == R.id.radioBtn2) { // [ID] Match
+
+                    Toast.makeText(getApplicationContext(),
+                            "Course selected-Science",
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                if (checkedButtonId == R.id.radioBtn3) { // [ID] Match
+
+                    Toast.makeText(getApplicationContext(),
+                            "Course selected-Commerce",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+}</textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 7 - Menu Application</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/e_commerce" <!-- [D] MAIN -->
+    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java -->
+
+    <TextView
+        android:id="@+id/textView" <!-- [ID] MAIN -->
+        android:layout_width="286dp"
+        android:layout_height="65dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="63dp"
+        android:text="Welcome to E-Commerce"
+        android:textColor="#F11D1D"
+        android:textColorLink="#F31818"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+
+</RelativeLayout></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>menu.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search" <!-- [ID] MAIN -->
+        android:icon="@drawable/search" <!-- [D] MAIN -->
+        app:showAsAction="always"
+        android:title="search" />
+
+    <item
+        android:id="@+id/Refresh" <!-- [ID] MAIN -->
+        android:title="Refresh"
+        android:icon="@drawable/refresh" <!-- [D] MAIN -->
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/Addtocart" <!-- [ID] MAIN -->
+        android:title="Addtocart"/>
+
+    <item
+        android:id="@+id/settings" <!-- [ID] MAIN -->
+        android:title="settings"/>
+
+</menu></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.l7; // [P] MAIN
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity { // [A] MAIN (Filename: MainActivity.java)
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+    }
+
+    @Override
+    public boolean onCreatePanelMenu(int featureId, @NonNull Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+
+        inflater.inflate(R.menu.menus, menu); // [M] Match: menus.xml
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (item.getItemId() == R.id.search) { // [ID] Match: menus.xml
+            Toast.makeText(this, "Search Successfull", Toast.LENGTH_SHORT).show();
+        }
+
+        if (item.getItemId() == R.id.Refresh) { // [ID] Match: menus.xml
+            Toast.makeText(this, "Refresh Successfull", Toast.LENGTH_SHORT).show();
+        }
+
+        if (item.getItemId() == R.id.Addtocart) { // [ID] Match: menus.xml
+            Toast.makeText(this, "Addtocart Successfull", Toast.LENGTH_SHORT).show();
+        }
+
+        if (item.getItemId() == R.id.settings) { // [ID] Match: menus.xml
+            Toast.makeText(this, "Settings Clicked", Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>AndroidManifest.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light"
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity" <!-- [A] Match: MainActivity.java -->
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest>.</textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 8 - Read/Write the local data</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView" <!-- [ID] MAIN -->
+        android:layout_width="134dp"
+        android:layout_height="62dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Select Language" />
+
+    <Spinner
+        android:id="@+id/languagespinner" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/textView2" <!-- [ID] MAIN -->
+        android:layout_width="175dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Enable Notifications" />
+
+    <Switch
+        android:id="@+id/notificationswitch" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Switch" />
+
+    <Button
+        android:id="@+id/savebutton" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Save Preferences" />
+
+    <TextView
+        android:id="@+id/preferenceTextView" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="Preferences will be displayed here." />
+
+</LinearLayout></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>strings.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><resources>
+
+    <string name="app_name">userprefrence</string> <!-- [S] MAIN -->
+
+    <string-array name="languages"> <!-- [S] MAIN -->
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>german</item>
+        <item>Chinese</item>
+    </string-array>
+
+</resources></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.userprefrence; // [P] MAIN
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity // [A] MAIN (Filename: MainActivity.java)
+{
+
+    private Spinner languageSpinner;
+    private Switch notificationsSwitch;
+    private TextView preferencesTextView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+
+        languageSpinner = findViewById(R.id.languagespinner); // [ID] Match
+
+        notificationsSwitch = findViewById(R.id.notificationswitch); // [ID] Match
+
+        preferencesTextView = findViewById(R.id.preferenceTextView); // [ID] Match
+
+        Button saveButton = findViewById(R.id.savebutton); // [ID] Match
+
+        loadUserPreferences();
+
+        saveButton.setOnClickListener(v -> saveUserPreferences());
+    }
+
+    private void saveUserPreferences()
+    {
+        String language = languageSpinner.getSelectedItem().toString();
+
+        boolean notificationsEnabled = notificationsSwitch.isChecked();
+
+        SharedPreferences sharedPreferences =
+                getSharedPreferences("UserPreferences", Context.MODE_PRIVATE); // [V] MAIN
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("language", language); // [K] MAIN
+
+        editor.putBoolean("notificationsEnabled", notificationsEnabled); // [K] MAIN
+
+        editor.apply();
+
+        preferencesTextView.setText(
+                String.format("Language:%s\nNotificationsEnabled:%b",
+                        language,
+                        notificationsEnabled));
+    }
+
+    private void loadUserPreferences()
+    {
+        SharedPreferences sharedPreferences =
+                getSharedPreferences("UserPreferences", Context.MODE_PRIVATE); // [V] Match
+
+        String language =
+                sharedPreferences.getString("language", "English"); // [K] Match
+
+        boolean notificationsEnabled =
+                sharedPreferences.getBoolean("notificationsEnabled", false); // [K] Match
+
+        ArrayAdapter<CharSequence> adapter =
+                ArrayAdapter.createFromResource(
+                        this,
+                        R.array.languages, // [S] Match: strings.xml
+                        android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item);
+
+        languageSpinner.setAdapter(adapter);
+
+        int spinnerPosition = adapter.getPosition(language);
+
+        languageSpinner.setSelection(spinnerPosition);
+
+        notificationsSwitch.setChecked(notificationsEnabled);
+
+        preferencesTextView.setText(
+                String.format("Language:%s\nNotificationsEnabled:%b",
+                        language,
+                        notificationsEnabled));
+    }
+}</textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 9 - Display Map based on the Current/given  location</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/location_text" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Getting location..."
+        android:textSize="18sp" />
+
+</LinearLayout></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.loc; // [P] MAIN
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+public class MainActivity extends AppCompatActivity { // [A] MAIN (Filename: MainActivity.java)
+
+    private static final int LOCATION_PERMISSION_CODE = 1; // [V] MAIN
+
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private TextView locationText;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+
+        locationText = findViewById(R.id.location_text); // [ID] Match
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+
+                double lat = location.getLatitude();
+                double lon = location.getLongitude();
+
+                locationText.setText("Latitude: " + lat + "\nLongitude: " + lon);
+            }
+        };
+
+        // Check permissions
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_CODE); // [V] Match
+
+        } else {
+            startLocationUpdates();
+        }
+    }
+
+    private void startLocationUpdates() {
+
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    5000,
+                    5,
+                    locationListener);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(
+                requestCode,
+                permissions,
+                grantResults);
+
+        if (requestCode == LOCATION_PERMISSION_CODE) { // [V] Match
+
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                startLocationUpdates();
+
+            } else {
+
+                Toast.makeText(
+                        this,
+                        "Location permission denied.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>AndroidManifest.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission
+        android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Loc" <!-- [T] MAIN -->
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity" <!-- [A] Match: MainActivity.java -->
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest></textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 10 - Create an application to send SMS and Receive  SMS</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <EditText
+        android:id="@+id/editTextPhone" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Phone Number"
+        android:inputType="phone"/>
+
+    <EditText
+        android:id="@+id/editTextMessage" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Message"
+        android:inputType="textMultiLine"
+        android:minLines="3"/>
+
+    <Button
+        android:id="@+id/buttonSend" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send SMS"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.sms; // [P] MAIN
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+public class MainActivity extends AppCompatActivity { // [A] MAIN (Filename: MainActivity.java)
+
+    EditText phoneNumberEditText, messageEditText;
+    Button sendButton;
+
+    private static final int SMS_PERMISSION_CODE = 100; // [V] MAIN
+
+    private String permission;
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+
+        phoneNumberEditText = findViewById(R.id.editTextPhone); // [ID] Match
+
+        messageEditText = findViewById(R.id.editTextMessage); // [ID] Match
+
+        sendButton = findViewById(R.id.buttonSend); // [ID] Match
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (checkPermission(Manifest.permission.SEND_SMS)) {
+
+                    sendSMS();
+
+                } else {
+
+                    ActivityCompat.requestPermissions(
+                            MainActivity.this,
+                            new String[]{Manifest.permission.SEND_SMS},
+                            SMS_PERMISSION_CODE); // [V] Match
+                }
+            }
+        });
+    }
+
+    private boolean checkPermission(String permission) {
+
+        this.permission = permission;
+
+        int check = ContextCompat.checkSelfPermission(this, permission);
+
+        return (check == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void sendSMS() {
+
+        String phoneNumber = phoneNumberEditText.getText().toString();
+
+        String message = messageEditText.getText().toString();
+
+        try {
+
+            SmsManager smsManager = SmsManager.getDefault();
+
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+
+            Toast.makeText(this, "SMS Sent!", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+
+            Toast.makeText(this,
+                    "Failed to send SMS: " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+
+        if (requestCode == SMS_PERMISSION_CODE) { // [V] Match
+
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                sendSMS();
+
+            } else {
+
+                Toast.makeText(this,
+                        "SMS permission denied",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>AndroidManifest.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission
+        android:name="android.permission.SEND_SMS"
+        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
+
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"/>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Sms" <!-- [T] MAIN -->
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity" <!-- [A] Match: MainActivity.java -->
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest></textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 11 - Create an application to send a Email</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/email_address" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/email_subject" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Subject"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/email_message" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Message"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:gravity="top"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/send_email" <!-- [ID] MAIN -->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send Email" />
+
+</LinearLayout></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.email; // [P] MAIN
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.email.R;
+
+public class MainActivity extends AppCompatActivity { // [A] MAIN (Filename: MainActivity.java)
+
+    private EditText emailAddressEditText;
+    private EditText emailSubjectEditText;
+    private EditText emailMessageEditText;
+    private Button sendEmailButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+
+        emailAddressEditText = findViewById(R.id.email_address); // [ID] Match
+
+        emailSubjectEditText = findViewById(R.id.email_subject); // [ID] Match
+
+        emailMessageEditText = findViewById(R.id.email_message); // [ID] Match
+
+        sendEmailButton = findViewById(R.id.send_email); // [ID] Match
+
+        sendEmailButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                sendEmail();
+            }
+        });
+    }
+
+    private void sendEmail() {
+
+        String emailAddress = emailAddressEditText.getText().toString();
+
+        String subject = emailSubjectEditText.getText().toString();
+
+        String message = emailMessageEditText.getText().toString();
+
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setType("message/rfc822");
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailAddress});
+
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+
+        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+        if (emailIntent.resolveActivity(getPackageManager()) != null) {
+
+            startActivity(Intent.createChooser(emailIntent, "Send Email Using:"));
+
+        } else {
+
+            Toast.makeText(this,
+                    "Email Client Not Installed",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+}</textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>AndroidManifest.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission
+        android:name="android.permission.SEND_SMS"
+        tools:ignore="PermissionImpliesUnsupportedChromeOsHardware" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Email" <!-- [T] MAIN -->
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity" <!-- [A] Match: MainActivity.java -->
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest></textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+<div class="container">
+
+<div class="program">
+<div class="program-title" onclick="toggleProgram(this)">Program 12 - Create a sample application with login module</div>
+<div class="program-files">
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>activity_main.xml</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly><?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login1" <!-- [D] MAIN -->
+    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java -->
+
+    <TextView
+        android:id="@+id/textView" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="131dp"
+        android:text="USER NAME"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextText" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView" <!-- [ID] Match -->
+        android:layout_marginStart="85dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:hint="username"
+        android:inputType="text"
+        android:text="Enter the Name" />
+
+    <TextView
+        android:id="@+id/textView2" <!-- [ID] MAIN -->
+        android:layout_width="143dp"
+        android:layout_height="36dp"
+        android:layout_below="@id/editTextText" <!-- [ID] Match -->
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="147dp"
+        android:text="PASSWORD"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextText2" <!-- [ID] MAIN -->
+        android:layout_width="222dp"
+        android:layout_height="55dp"
+        android:layout_below="@id/textView" <!-- [ID] Match -->
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="83dp"
+        android:layout_marginTop="173dp"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="text"
+        android:text="Enter the Password" />
+
+    <Button
+        android:id="@+id/button" <!-- [ID] MAIN -->
+        android:layout_width="301dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="58dp"
+        android:layout_marginBottom="141dp"
+        android:text="LOGIN"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</RelativeLayout></textarea>
+</div>
+</div>
+
+<div class="file">
+<div class="file-title" onclick="toggleFile(this)">
+<span>MainActivity.java</span>
+<button class="copy" onclick="copyCode(event)">📋</button>
+</div>
+<div class="file-content">
+<textarea class="code" readonly>package com.example.loginapp; // [P] MAIN
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity { // [A] MAIN (Filename: MainActivity.java)
+
+    private EditText editTextUsername, editTextPassword;
+    private Button buttonlogin;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+
+        editTextUsername = findViewById(R.id.editTextText); // [ID] Match
+
+        editTextPassword = findViewById(R.id.editTextText2); // [ID] Match
+
+        buttonlogin = findViewById(R.id.button); // [ID] Match
+
+        buttonlogin.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                String username = editTextUsername.getText().toString().trim();
+
+                String password = editTextPassword.getText().toString().trim();
+
+                if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+
+                    Toast.makeText(
+                            MainActivity.this,
+                            " Username or Password cannot not be empty",
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    if (username.equals("admin") && password.equals("pass")) {
+
+                        Toast.makeText(
+                                MainActivity.this,
+                                "Login Successful",
+                                Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+                        Toast.makeText(
+                                MainActivity.this,
+                                "Invalid username or password",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+}</textarea>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<script>
+let modified=false;
+
+function toggleProgram(el){
+ const p=el.parentElement;
+ document.querySelectorAll(".program").forEach(x=>{if(x!==p)x.classList.remove("active");});
+ p.classList.toggle("active");
+}
+function toggleFile(el){
+ if(event.target.classList.contains("copy")) return;
+ el.parentElement.classList.toggle("active");
+}
+function copyCode(event){
+ event.stopPropagation();
+ const ta=event.target.closest(".file").querySelector(".code");
+ navigator.clipboard.writeText(ta.value);
+ const b=event.target;
+ const t=b.textContent;
+ b.textContent="✓";
+ setTimeout(()=>b.textContent=t,1000);
+}
+document.addEventListener("input",e=>{if(e.target.classList.contains("code"))modified=true;});
+
+function exportData(){
+ if(!confirm("Download updated file?")) return;
+ const arr=[...document.querySelectorAll(".code")].map(x=>x.value);
+ const blob=new Blob([JSON.stringify(arr,null,2)],{type:"application/json"});
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="programs.json";
+ a.click();
+ URL.revokeObjectURL(a.href);
+ modified=false;
+}
+function importData(){
+ const i=document.getElementById("fileInput");
+ i.onchange=()=>{
+   const f=i.files[0]; if(!f) return;
+   const r=new FileReader();
+   r.onload=()=>{
+      const arr=JSON.parse(r.result);
+      document.querySelectorAll(".code").forEach((t,idx)=>t.value=arr[idx]||"");
+      modified=false;
+   };
+   r.readAsText(f);
+ };
+ i.click();
+}
+window.addEventListener("beforeunload",e=>{
+ if(modified){e.preventDefault();e.returnValue="";}
+});
 </script>
-
 </body>
 </html>
