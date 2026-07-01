@@ -340,20 +340,62 @@ public class MainActivity extends AppCompatActivity    // [A] MAIN (Java filenam
 </div>
 <div class="file-content">
 <textarea class="code" readonly>
-package com.example.loginapp; // [P] MAIN
+package com.example.controls; // [P] MAIN
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity // [A] MAIN (Filename: MainActivity.java)
-{
+public class MainActivity extends AppCompatActivity { // [A] MAIN (Filename: MainActivity.java)
+
+    private EditText editTextUsername, editTextPassword;
+    private Button buttonLogin;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
+        EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_main); // [L] Match: activity_main.xml
+
+        editTextUsername = findViewById(R.id.editTextUsername); // [ID] Match
+
+        editTextPassword = findViewById(R.id.editTextPassword); // [ID] Match
+
+        buttonLogin = findViewById(R.id.buttonLogin); // [ID] Match
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                String username = editTextUsername.getText().toString().trim();
+
+                String password = editTextPassword.getText().toString().trim();
+
+                if (username.equals("admin") && password.equals("pass")) {
+
+                    Toast.makeText(
+                            MainActivity.this,
+                            "Login successful",
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(
+                            MainActivity.this,
+                            "Invalid username or password",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
 </textarea>
@@ -362,7 +404,7 @@ public class MainActivity extends AppCompatActivity // [A] MAIN (Filename: MainA
 
 <div class="file">
 <div class="file-title" onclick="toggleFile(this)">
-<span>MainActivity.java</span>
+<span>bg_outer.xml</span>
 <button class="copy" onclick="copyCode(event)">📋</button>
 </div>
 <div class="file-content">
@@ -381,7 +423,7 @@ public class MainActivity extends AppCompatActivity // [A] MAIN (Filename: MainA
 
 <div class="file">
 <div class="file-title" onclick="toggleFile(this)">
-<span>MainActivity.java</span>
+<span>bg_inner.xml</span>
 <button class="copy" onclick="copyCode(event)">📋</button>
 </div>
 <div class="file-content">
