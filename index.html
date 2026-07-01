@@ -157,24 +157,30 @@ public class MainActivity extends AppCompatActivity    // [A] MAIN (Java filenam
 <textarea class="code" readonly>
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/main" <!-- [ID] MAIN -->
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java → class name -->
+    tools:context=".MainActivity"> <!-- [A] Match: MainActivity.java -->
 
-    <TextView
-        android:id="@+id/orientationchange" <!-- [ID] MAIN -->
+    <Button
+        android:id="@+id/por" <!-- [ID] MAIN -->
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="107dp"
-        android:layout_marginTop="406dp"
-        android:text="OrientationChange"
-        android:textSize="24sp"/>
+        android:text="Portrait"
+        android:layout_centerInParent="true" />
+
+    <Button
+        android:id="@+id/lan" <!-- [ID] MAIN -->
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Landscape"
+        android:layout_below="@id/por" <!-- [ID] Match -->
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
 
 </RelativeLayout>
 </textarea>
